@@ -9,6 +9,7 @@ function love.load()
 
   --files / classes--
   require('sprites')
+  require('coin')
   require('player')
 
   --platforms table--
@@ -27,6 +28,9 @@ function love.update(dt)
 
   --update player--
   PlayerUpdate(dt)
+
+  --coin animation--
+  CoinUpdate(dt)
 end
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
@@ -39,6 +43,8 @@ function love.draw()
   for i,p in ipairs(platforms) do
     love.graphics.rectangle('fill', p.body:getX(), p.body:getY(), p.width, p.height)
   end
+
+  love.graphics.draw(tempSprite.coin_sprite, 100, 200, nil, nil, nil, tempSprite.coin_sprite:getWidth()/2, nil)
 end
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------

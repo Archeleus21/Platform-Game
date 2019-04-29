@@ -1,5 +1,10 @@
 sprites = {}
-sprites.bronze_coin = love.graphics.newImage('Sprites/Items/bronze_coin_1.png')
+sprites.bronze_coin1 = love.graphics.newImage('Sprites/Items/bronze_coin_1.png')
+sprites.bronze_coin2 = love.graphics.newImage('Sprites/Items/bronze_coin_2.png')
+sprites.bronze_coin3 = love.graphics.newImage('Sprites/Items/bronze_coin_3.png')
+sprites.bronze_coin4 = love.graphics.newImage('Sprites/Items/bronze_coin_4.png')
+sprites.bronze_coin5 = love.graphics.newImage('Sprites/Items/bronze_coin_5.png')
+sprites.bronze_coin6 = love.graphics.newImage('Sprites/Items/bronze_coin_6.png')
 sprites.player_jump = love.graphics.newImage('Sprites/Player/adventurer_jump.png')
 sprites.player_idle = love.graphics.newImage('Sprites/Player/adventurer_idle.png')
 sprites.background = love.graphics.newImage('Sprites/Environment/background_sky.png')
