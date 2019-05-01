@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 function love.load()
+  --change the default from  880x600 to whatever i want--
+  love.window.setMode(900, 700)
   --physics--
   --newWorld(gravityX, gravityY, sleep)
   gameWorld = love.physics.newWorld(nil, 400, false)
@@ -11,12 +13,32 @@ function love.load()
   require('sprites')
   require('coin')
   require('player')
-
+  --used to implement tile maps--
+  sti = require('Simple-Tilemap-Implementation/sti')
+  --used for camera implementation--
+  cameraFile = require('HUMP Library/hump-master/camera')  --beecomes a "function"--
+  cam = cameraFile()
   --platforms table--
   platforms = {}
 
-  --create a platform to test with preset location and size--
-  SpawnPlatform(50, 400, 300, 30)
+  --store the gameMap--
+  gameMap = sti("Sprites/Maps/GameMap.lua")
+--create a platform using the parameteres from the tilemap creator--
+  for i, obj in pairs(gameMap.layers["Platforms"].objects) do
+    SpawnPlatform(obj.x, obj.y, obj.width, obj.height)
+  end
+
+  --spawn coins using the parameters and object placement from the tile map creator--
+  for i, obj in pairs(gameMap.layers["Coins"].objects) do
+    SpawnCoin(obj.x, obj.y)
+  end
+
+  --game state--
+  gameState = 1
+  --font--
+  gameFont = love.graphics.newFont(30)
+  --game timer--
+  timer = 0
 
 end
 ---------------------------------------------------------------------------------
@@ -28,23 +50,56 @@ function love.update(dt)
 
   --update player--
   PlayerUpdate(dt)
-
   --coin animation--
   CoinUpdate(dt)
+  --update map--
+  gameMap:update(dt)
+  --update camera--
+  cam:lookAt(player.body:getX(), player.body:getY()) --locks cam to center of screen--
+
+  --time counter--
+  if gameState == 2 then
+    timer = timer + dt
+  end
+
+  --checks if all coins are collected--
+  if #coins == 0 and gameState == 2 then
+    gameState = 1
+    --resets player position--
+    player.body:setPosition(100, 400)
+
+    --respawns coins at end of game/all coins are collected--
+    if #coins == 0 then
+      for i, obj in pairs(gameMap.layers["Coins"].objects) do
+        SpawnCoin(obj.x, obj.y)
+      end
+    end
+  end
 end
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 function love.draw()
   -- body...
+  --start camera--
+  cam:attach()
+  --draw map--
+  gameMap:drawLayer(gameMap.layers["Tile Layer 1"])
   --lets draw the player--
   love.graphics.draw(player.sprite, player.body:getX(), player.body:getY(), nil, player.direction, 1, sprites.player_idle:getWidth()/2, (sprites.player_idle:getHeight()/2) + 8)
 
-  --lets cycle through the platforms table and draw each platform--
-  for i,p in ipairs(platforms) do
-    love.graphics.rectangle('fill', p.body:getX(), p.body:getY(), p.width, p.height)
+  for i,c in ipairs(coins) do
+    love.graphics.draw(tempSprite.coin_sprite, c.x, c.y, nil, nil, nil, tempSprite.coin_sprite:getWidth()/2, nil)
   end
 
-  love.graphics.draw(tempSprite.coin_sprite, 100, 200, nil, nil, nil, tempSprite.coin_sprite:getWidth()/2, nil)
+  --stop camera--
+  cam:detach()
+
+  if gameState == 1 then
+    love.graphics.setFont(gameFont)
+    love.graphics.printf("Press any key to Start!", 0, 50, love.graphics.getWidth(), "center")
+  end
+
+  love.graphics.print("Time: " .. math.floor(timer), 10, 660)
 end
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
@@ -73,4 +128,9 @@ end
 
 function EndContact(a, b, coll)
   player.grounded = false
+end
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+function DistanceBetween(x1, y1, x2, y2)
+  return math.sqrt((y2 - y1)^2 + (x2 - x1)^2)
 end
