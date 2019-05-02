@@ -3,13 +3,13 @@ player = {}
 --newbody(world you created, x, y, dynamic or static)--
 player.body = love.physics.newBody(gameWorld, 100, 400, 'dynamic')
 --collision box--
-player.shape = love.physics.newRectangleShape(66, 92)
+player.shape = love.physics.newRectangleShape(75, 92)
 --puts shape in place--
 --newFixture(body, shape, density)--
 player.fixture = love.physics.newFixture(player.body, player.shape)
 --speed--
 player.speed = 300
---checks if player is on ground--
+--used to check if player is on ground--
 player.grounded = false
 --which way player is looking--
 player.direction = 1

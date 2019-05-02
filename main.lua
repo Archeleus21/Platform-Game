@@ -10,9 +10,11 @@ function love.load()
   gameWorld:setCallbacks(BeginContact, EndContact, preSolve, postSolve)
 
   --files / classes--
-  require('sprites')
-  require('coin')
-  require('player')
+  require('sprites')  --all sprites used for game--
+  require('coin')  --coin class--
+  require('player')  --player class--
+  require('show')  --used to serialize saveData--
+
   --used to implement tile maps--
   sti = require('Simple-Tilemap-Implementation/sti')
   --used for camera implementation--
@@ -20,6 +22,15 @@ function love.load()
   cam = cameraFile()
   --platforms table--
   platforms = {}
+  --saved data--
+  saveData = {}
+  saveData.bestTime = 999  --default value--
+  --checks if file as already been created--
+  if love.filesystem.getInfo("saveData.lua") then
+    --stores the data in the file if it already exists--
+    local data = love.filesystem.load("saveData.lua") --stores it as a function--
+    data()
+  end
 
   --store the gameMap--
   gameMap = sti("Sprites/Maps/GameMap.lua")
@@ -74,12 +85,25 @@ function love.update(dt)
         SpawnCoin(obj.x, obj.y)
       end
     end
+
+    --saving data to file--
+    if timer < saveData.bestTime then
+      saveData.bestTime = math.floor(time)
+      love.filesystem.write("saveData.lua", table.show(saveData, "saveData"))
+    end
   end
 end
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 function love.draw()
   -- body...
+  love.graphics.draw(sprites.background)
+  if cCollected == true then
+    love.graphics.print("collected", 50, 50)
+  end
+  if cDestroyed == true then
+    love.graphics.print("Destroyed", 50, 70)
+  end
   --start camera--
   cam:attach()
   --draw map--
@@ -97,6 +121,7 @@ function love.draw()
   if gameState == 1 then
     love.graphics.setFont(gameFont)
     love.graphics.printf("Press any key to Start!", 0, 50, love.graphics.getWidth(), "center")
+    love.graphics.printf("Best Time: " .. saveData.bestTime, 0, 150, love.graphics.getWidth(), "center")
   end
 
   love.graphics.print("Time: " .. math.floor(timer), 10, 660)

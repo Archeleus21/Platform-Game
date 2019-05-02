@@ -5,7 +5,8 @@ tempA = 1
 --every 1/10th of a second or so change sprites--
 maxTime = 0.15
 cTime = maxTime
-
+cCollected = false
+cDestroyed = false
 coins = {}
 
 function CoinUpdate(dt)
@@ -34,8 +35,9 @@ function CoinUpdate(dt)
   -----------------------------------------------------------------------
   --checking for player collision with coins--
   for  i,c in ipairs(coins) do
-    if DistanceBetween(c.x, c.y, player.body:getX(), player.body:getY()) < 50 then
+    if DistanceBetween(c.x, c.y, player.body:getX(), player.body:getY()) < 100 then
       c.collected = true
+      cCollected = true
     end
   end
 
@@ -43,6 +45,7 @@ function CoinUpdate(dt)
   for i = #coins, 1, -1 do
     local c = coins[i]
     if c.collected == true then
+      cDestroyed = true
       table.remove(coins[i])
     end
   end
