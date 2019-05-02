@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 function love.load()
-  --change the default from  880x600 to whatever i want--
+  --change the default from  800x600 to whatever i want--
   love.window.setMode(900, 700)
   --physics--
   --newWorld(gravityX, gravityY, sleep)
@@ -19,17 +19,17 @@ function love.load()
   sti = require('Simple-Tilemap-Implementation/sti')
   --used for camera implementation--
   cameraFile = require('HUMP Library/hump-master/camera')  --beecomes a "function"--
-  cam = cameraFile()
+  cam = cameraFile() --use variable above as function--
   --platforms table--
   platforms = {}
   --saved data--
   saveData = {}
-  saveData.bestTime = 999  --default value--
+  saveData.bestTime = 999  --create a default value--
   --checks if file as already been created--
   if love.filesystem.getInfo("saveData.lua") then
     --stores the data in the file if it already exists--
     local data = love.filesystem.load("saveData.lua") --stores it as a function--
-    data()
+    data()  --calls varaible above as function
   end
 
   --store the gameMap--
@@ -59,14 +59,14 @@ function love.update(dt)
   --update the physics--
   gameWorld:update(dt)
 
-  --update player--
+  --updates player--
   PlayerUpdate(dt)
-  --coin animation--
+  --coin animation and functions--
   CoinUpdate(dt)
-  --update map--
+  --updates map--
   gameMap:update(dt)
-  --update camera--
-  cam:lookAt(player.body:getX(), player.body:getY()) --locks cam to center of screen--
+  --updates camera--
+  cam:lookAt(player.body:getX(), player.body:getY()) --locks cam to center of screen following player--
 
   --time counter--
   if gameState == 2 then
@@ -100,12 +100,14 @@ function love.draw()
   --draws background--
   love.graphics.draw(sprites.background)
   --testing collisions--
+  --[[
   if cCollected == true then
     love.graphics.print("collected", 50, 50)
   end
   if cDestroyed == true then
     love.graphics.print("Destroyed", 50, 70)
   end
+  ]]--
   --start camera--
   cam:attach()
   --draw map--
@@ -136,9 +138,9 @@ function SpawnPlatform(x, y, width, height)
   local platform = {}
   --rigid body--
   platform.body = love.physics.newBody(gameWorld, x, y, 'static')
-  --collision shape--
+  --collision shape, (posx, posy, width, height)--
   platform.shape = love.physics.newRectangleShape(width/2, height/2, width, height)
-  --attack collision shape to body--
+  --attach collision shape to body--
   platform.fixture = love.physics.newFixture(platform.body, platform.shape)
   --stores width and height--
   platform.width = width
@@ -149,6 +151,7 @@ function SpawnPlatform(x, y, width, height)
 end
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
+--used to detect collision with any object--
 function BeginContact(a, b, coll)
   player.grounded = true
 end
@@ -158,6 +161,7 @@ function EndContact(a, b, coll)
 end
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
+--calculates distance betweeen objects--
 function DistanceBetween(x1, y1, x2, y2)
   return math.sqrt((y2 - y1)^2 + (x2 - x1)^2)
 end

@@ -5,8 +5,8 @@ tempA = 1
 --every 1/10th of a second or so change sprites--
 maxTime = 0.15
 cTime = maxTime
-cCollected = false
-cDestroyed = false
+--used for testing -> cCollected = false--
+--used for testing -> cDestroyed = false--
 coins = {}
 
 --used to spawn coins in game--
@@ -47,7 +47,7 @@ function CoinUpdate(dt)
   for  i,c in ipairs(coins) do
     if DistanceBetween(c.x, c.y, player.body:getX(), player.body:getY()) < 100 then
       c.collected = true
-      cCollected = true
+      --used for testing -> cCollected = true--
     end
   end
 
@@ -55,8 +55,8 @@ function CoinUpdate(dt)
   for i = #coins, 1, -1 do
     local c = coins[i]
     if c.collected == true then
-      cDestroyed = true
-      table.remove(coins[i])
+      -- used for testing -> cDestroyed = true--
+      table.remove(coins, i)
     end
   end
 end
