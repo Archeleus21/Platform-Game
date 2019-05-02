@@ -97,7 +97,9 @@ end
 ---------------------------------------------------------------------------------
 function love.draw()
   -- body...
+  --draws background--
   love.graphics.draw(sprites.background)
+  --testing collisions--
   if cCollected == true then
     love.graphics.print("collected", 50, 50)
   end
@@ -110,20 +112,20 @@ function love.draw()
   gameMap:drawLayer(gameMap.layers["Tile Layer 1"])
   --lets draw the player--
   love.graphics.draw(player.sprite, player.body:getX(), player.body:getY(), nil, player.direction, 1, sprites.player_idle:getWidth()/2, (sprites.player_idle:getHeight()/2) + 8)
-
+  --draws coins--
   for i,c in ipairs(coins) do
     love.graphics.draw(tempSprite.coin_sprite, c.x, c.y, nil, nil, nil, tempSprite.coin_sprite:getWidth()/2, nil)
   end
 
   --stop camera--
   cam:detach()
-
+  --user interface--
   if gameState == 1 then
     love.graphics.setFont(gameFont)
     love.graphics.printf("Press any key to Start!", 0, 50, love.graphics.getWidth(), "center")
     love.graphics.printf("Best Time: " .. saveData.bestTime, 0, 150, love.graphics.getWidth(), "center")
   end
-
+  --shows timer--
   love.graphics.print("Time: " .. math.floor(timer), 10, 660)
 end
 ---------------------------------------------------------------------------------

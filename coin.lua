@@ -9,6 +9,16 @@ cCollected = false
 cDestroyed = false
 coins = {}
 
+--used to spawn coins in game--
+function SpawnCoin(x, y)
+  local coin = {}
+  coin.x = x
+  coin.y = y
+  coin.collected = false
+
+  table.insert(coins, coin)
+end
+
 function CoinUpdate(dt)
   ---------------------------------------------------------------------
   --used for coin rotation animation--
@@ -49,14 +59,4 @@ function CoinUpdate(dt)
       table.remove(coins[i])
     end
   end
-end
-
---used to spawn coins in game--
-function SpawnCoin(x, y)
-  local coin = {}
-  coin.x = x
-  coin.y = y
-  coin.collected = false
-
-  table.insert(coins, coin)
 end
