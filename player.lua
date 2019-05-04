@@ -51,6 +51,7 @@ function love.keypressed(key, scancode, isrepeat)
     if key == 'space' and player.grounded == true then
       --impulse applied to player's body(x,y)--
       player.body:applyLinearImpulse(0, -3250)
+      blipSound:play()
     end
   end
 

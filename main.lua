@@ -8,7 +8,15 @@ function love.load()
   gameWorld = love.physics.newWorld(nil, 400, false)
   --checks if grounded, built functions inside () below --
   gameWorld:setCallbacks(BeginContact, EndContact, preSolve, postSolve)
+  --Audio/Sounds--
+  --(file path, type ('static' stores in memory, 'stream' loads when needed))
+  blipSound = love.audio.newSource('Audio/blip.wav', 'static')
+  blipSound:setVolume(1)
+  blipSound:setPitch(1.5)
 
+  natureMusic = love.audio.newSource('Audio/nature.ogg', 'static')
+  natureMusic:setVolume(.75)
+  natureMusic:play()
   --files / classes--
   require('sprites')  --all sprites used for game--
   require('coin')  --coin class--
