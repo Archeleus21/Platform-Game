@@ -96,8 +96,8 @@ function love.update(dt)
 
     --saving data to file--
     if timer < saveData.bestTime then
-      saveData.bestTime = math.floor(time)
-      love.filesystem.write("saveData.lua", table.show(saveData, "saveData"))
+      saveData.bestTime = math.floor(timer)
+      love.filesystem.write("saveData.lua", table.show(saveData, "saveData.lua"))
     end
   end
 end
