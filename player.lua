@@ -95,7 +95,7 @@ function love.keypressed(key, scancode, isrepeat)
   if gameState == 2 then
     if key == 'space' and player.grounded == true then
       --impulse applied to player's body(x,y)--
-      player.body:applyLinearImpulse(0, -3250)
+      player.body:applyLinearImpulse(0, -3600)
       --plays sound for jump
       blipSound:play()
     end
